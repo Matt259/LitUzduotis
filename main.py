@@ -7,9 +7,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import schedule
 import time
+import os
 
 def create_finished_excel(sheets: dict) -> None:
-     with pd.ExcelWriter('Uzduotis_python.xlsx', engine='openpyxl') as writer:
+     with pd.ExcelWriter('Analysis/Uzduotis_python.xlsx', engine='openpyxl') as writer:
         for sheet_name, df in sheets.items():
             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
@@ -44,7 +45,7 @@ def get_ve_and_se_sum(df: DataFrame) -> list:
 def apply_conditional_formatting(df: DataFrame) -> None:
     try:
         # Load the workbook
-        wb = load_workbook('Uzduotis_python.xlsx')
+        wb = load_workbook('Analysis/Uzduotis_python.xlsx')
         
         # Select the sheet to work with
         ws = wb["Duomenys"]
@@ -61,7 +62,7 @@ def apply_conditional_formatting(df: DataFrame) -> None:
                 cell = ws.cell(row=idx+2, column=10)  
                 cell.fill = late_color
 
-        wb.save('Uzduotis_python.xlsx')
+        wb.save('Analysis/Uzduotis_python.xlsx')
         
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -104,7 +105,8 @@ def plot_document_numbers(df: DataFrame):
         plt.text(i, j, str(j), ha='center', va='top')
     for i, j, k in zip(x, y1, y2):
         plt.text(i, j + k, str(k), ha='center', va='bottom')
-    plt.savefig('Grafikas.png', dpi=300)
+    os.makedirs('Analysis', exist_ok=True)
+    plt.savefig('Analysis/Grafikas.png', dpi=300)
     
 
 def documents_tool_df(df: DataFrame) -> DataFrame:
